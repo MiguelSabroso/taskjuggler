@@ -160,7 +160,7 @@ task WMGame "Web & Mobile Game" {
 
   task tmobF "Mobile Front End" {
   purge chargeset
-  chargeset mFront
+  chargeset back
   responsible me
   depends WMGame.twebF
 
@@ -183,6 +183,7 @@ task WMGame "Web & Mobile Game" {
 }
 
 task tcloud "Cloud Deployment" {
+  purge chargeset
   chargeset back
   responsible dev1
   depends WMGame.tback
