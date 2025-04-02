@@ -19,7 +19,7 @@ project pSix "Web Game"  2024-12-15 +5m {
   # the project reports. If not specified, the current day will be
   # used, but this will likely be outside of the project range, so it
   # can't be seen in the reports.
-  now 2025-02-25-13:00
+  now 2025-04-02-13:00
   # The currency for all money values is the US Dollar.
   currency "EUR"
 
@@ -68,6 +68,12 @@ resource dev2 "Samantha Müller" {
 resource dev3 "Peter Green" {
   email "kkk@unizar.es"
 }
+
+resource me "Miguel Sabroso" {
+  email "875307@unizar.es"
+  workinghours mon - fri 08:00 - 12:00
+}
+
 
 # Now we specify the work packages. The whole project is described as
 # a task that contains subtasks. These subtasks are then broken down
@@ -139,6 +145,11 @@ task WMGame "Web & Mobile Game" {
       effort 15d
       allocate dev2, dev3
       depends WMGame.twebF.tGUId
+      journalentry 2025-04-02 "Nueva funcionalidad solicitada por cliente" {
+        author me
+        alert yellow
+        summary "El cliente ha pedido soporte adicional para dispositivos táctiles."
+      }
     }
     task tFEt "Web Front End Test" {
       effort 6d
@@ -147,6 +158,53 @@ task WMGame "Web & Mobile Game" {
     }    
   }
 
+  task tmobF "Mobile Front End" {
+  purge chargeset
+  chargeset mFront
+  responsible me
+  depends WMGame.twebF
+
+  task tMobileDesign "Mobile UI Design" {
+    effort 3d
+    allocate me
+  }
+
+  task tMobileImpl "Mobile Implementation" {
+    effort 5d
+    allocate me
+    depends WMGame.tmobF.tMobileDesign
+  }
+
+  task tMobileTest "Mobile Testing" {
+    effort 2d
+    allocate me
+    depends WMGame.tmobF.tMobileImpl
+  }
+}
+
+task tcloud "Cloud Deployment" {
+  chargeset back
+  responsible dev1
+  depends WMGame.tback
+
+  task tCloudEval "Evaluate Cloud Providers" {
+    effort 2d
+    allocate boss
+  }
+
+  task tCloudSetup "Set Up Infrastructure" {
+    effort 3d
+    allocate dev1
+    depends WMGame.tcloud.tCloudEval
+  }
+
+  task tCloudDeploy "Deploy Backend" {
+    effort 2d
+    allocate dev1
+    depends WMGame.tcloud.tCloudSetup
+  }
+}
+
   task ttest "Acceptance tests" {
       effort 10d
       allocate boss
@@ -154,6 +212,7 @@ task WMGame "Web & Mobile Game" {
       actual:effort 20d
       depends WMGame.twebF
       depends WMGame.tback
+      start 2025-05-15
       }
 
     
@@ -252,6 +311,17 @@ textreport frame "" {
     title "Resource Graph"
     center '<[report id="resourceGraph"]>'
   }
+}
+
+# Informe añadido para mostrar la planificación inicial del proyecto (escenario 'plan'),
+# tal como se solicita en la práctica 5.
+taskreport initialPlan "" {
+  scenarios plan
+  headline "Initial Project Plan"
+  columns bsi { title 'WBS' },
+          name, start, end, effort, cost
+  loadunit days
+  caption "Initial project schedule overview"
 }
 
 # A traditional Gantt chart with a project overview.
