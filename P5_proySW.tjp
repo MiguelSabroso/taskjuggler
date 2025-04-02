@@ -148,7 +148,7 @@ task WMGame "Web & Mobile Game" {
       journalentry 2025-04-02 "Nueva funcionalidad solicitada por cliente" {
         author me
         alert yellow
-        summary "El cliente ha pedido soporte adicional para dispositivos móviles."
+        summary "El cliente ha pedido soporte adicional para dispositivos táctiles."
       }
     }
     task tFEt "Web Front End Test" {
